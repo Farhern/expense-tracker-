@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect }  from 'react';
 import { collection, addDoc } from "firebase/firestore"; 
-import Image from 'next/image';
+import { db } from './firebase';
 
 export default function Home() {
   const [items, setItems] = useState([
@@ -13,6 +13,17 @@ export default function Home() {
   const [total, setTotal] = useState(0);
 
   // Add item to database
+  const addItem = async (e) => {
+    e.preventDefault();
+    if (newItem.name !== '' && newItem.price !== '') {
+      // setItems([...items, newItem]);
+      await addDoc(collection(db, 'items'), {
+        name: newItem.name.trim(),
+        price: newItem.price,
+      });
+      setNewItem({ name: '', price: '' });
+    }
+  };
 
 
   // Read items from database
