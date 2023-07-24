@@ -1,13 +1,13 @@
 'use client'
 import React, { useState, useEffect }  from 'react';
-import { collection, addDoc } from "firebase/firestore"; 
+import { collection, addDoc, getDoc, querySnapshot, query, onSnapshot } from "firebase/firestore"; 
 import { db } from './firebase';
 
 export default function Home() {
   const [items, setItems] = useState([
-  { name: 'coffee', price: 4.95},
-  { name: 'movie', price: 24.95},
-  { name: 'candy', price: 7.95}
+  // { name: 'coffee', price: 4.95},
+  // { name: 'movie', price: 24.95},
+  // { name: 'candy', price: 7.95}
   ]);
   const [newItem, setNewItem] = useState({name: '', price: ''})
   const [total, setTotal] = useState(0);
@@ -25,11 +25,36 @@ export default function Home() {
     }
   };
 
-
   // Read items from database
+  useEffect(() => {
+    const q = query(collection(db, 'items'));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      let itemsArr = [];
+
+      querySnapshot.forEach((doc) => {
+        itemsArr.push({ ...doc.data(), id: doc.id });
+      });
+      setItems(itemsArr)
 
 
   // Read total from itemsArr
+  const calculateTotal = () => {
+    const totalPrice = itemsArr.reduce( 
+      (sum, item) => sum + parseFloat(item.price),
+      0
+    );
+    setTotal(totalPrice);
+  };
+  calculateTotal();
+  return () => unsubscribe();
+    });
+  },[]);
+
+
+  // Delete items from database
+  
+
+
 
   return (
     <main className='flex min-h-screen flex-col items-center justify-between sm:p-24 p-4 bg-black text-white'>
