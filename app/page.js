@@ -1,6 +1,15 @@
 'use client'
 import React, { useState, useEffect }  from 'react';
-import { collection, addDoc, getDoc, querySnapshot, query, onSnapshot } from "firebase/firestore"; 
+import { 
+  collection,
+  addDoc, 
+  getDoc, 
+  querySnapshot, 
+  query, 
+  onSnapshot, 
+  deleteDoc,
+  doc 
+} from "firebase/firestore"; 
 import { db } from './firebase';
 
 export default function Home() {
@@ -52,9 +61,9 @@ export default function Home() {
 
 
   // Delete items from database
-  
-
-
+  const deleteItem = async(id) =>{
+    await deleteDoc(doc(db, 'items', id));
+  };
 
   return (
     <main className='flex min-h-screen flex-col items-center justify-between sm:p-24 p-4 bg-black text-white'>
@@ -99,6 +108,7 @@ export default function Home() {
                   <span>${item.price}</span>
                 </div>
                 <button 
+                  onClick={() => deleteItem(item.id)}
                    className='ml-8 p-4 border-l-2 border-slate-900 hover:bg-slate-900 w-16'
                  >
                     x
