@@ -2,13 +2,13 @@
 import React, { useState, useEffect }  from 'react';
 import { 
   collection,
-  addDoc, 
-  getDoc, 
-  querySnapshot, 
-  query, 
-  onSnapshot, 
+  addDoc,
+  getDoc,
+  querySnapshot,
+  query,
+  onSnapshot,
   deleteDoc,
-  doc 
+  doc,
 } from "firebase/firestore"; 
 import { db } from './firebase';
 
@@ -64,6 +64,14 @@ export default function Home() {
   const deleteItem = async(id) =>{
     await deleteDoc(doc(db, 'items', id));
   };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const currentURL = window.location.href;
+      console.log('Current URL:', currentURL);
+    }
+  }, []);
+
 
   return (
     <main className='flex min-h-screen flex-col items-center justify-between sm:p-24 p-4 bg-black text-white'>
